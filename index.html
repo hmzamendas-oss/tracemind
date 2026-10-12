@@ -1,0 +1,73 @@
+< !DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TraceMind — AI Debugging</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080b12;color:#e8edf8;font-family:Arial,sans-serif}
+header{padding:20px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #202637}
+.logo{font-size:24px;font-weight:bold;color:#7c9cff}
+.logo span{color:white}
+.tag{color:#9ba8c2;font-size:13px}
+main{max-width:900px;margin:70px auto;padding:20px}
+h1{font-size:clamp(34px,6vw,58px);margin:12px 0}
+h1 span{color:#819cff}
+.intro{color:#9ba8c2;line-height:1.7}
+.panel{margin-top:32px;padding:24px;border:1px solid #293248;border-radius:18px;background:#101522}
+label{display:block;margin-bottom:12px;font-weight:bold}
+textarea{width:100%;min-height:150px;background:#080d18;color:#e8edf8;border:1px solid #303a50;border-radius:10px;padding:14px;font:14px monospace;resize:vertical}
+button{margin-top:15px;width:100%;padding:15px;background:#718bff;color:#071020;font-weight:bold;border:0;border-radius:10px;font-size:16px;cursor:pointer}
+button:hover{background:#91a4ff}
+#result{display:none;margin-top:22px;padding:18px;background:#0a1b19;border:1px solid #245b4d;border-radius:12px;line-height:1.7;overflow-wrap:anywhere}
+.small{font-size:12px;color:#8794ad;margin-top:20px}
+footer{text-align:center;color:#65718a;padding:30px;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">Trace<span>Mind</span></div>
+<div class="tag">Developer tools · Preview</div>
+</header>
+<main>
+<div class="tag">✦ YOUR DEBUGGING WORKSPACE</div>
+<h1>Understand errors.<br><span>Fix them faster.</span></h1>
+<p class="intro">Paste an error message or log to start investigating. TraceMind helps you organize the evidence and identify your next debugging steps.</p>
+<div class="panel">
+<label for="error">Error message or log</label>
+<textarea id="error" placeholder="Paste your error here...&#10;Example: TypeError: Cannot read properties of undefined"></textarea>
+<button onclick="analyze()">Analyze error →</button>
+<div id="result" role="status"></div>
+<p class="small">Local demo · Your input is processed in this page only.</p>
+</div>
+</main>
+<footer>TraceMind © 2026 · Built for developers</footer>
+<script>
+function analyze(){
+const input=document.getElementById('error').value.trim();
+const result=document.getElementById('result');
+if(!input){
+result.style.display='block';
+result.textContent='Please paste an error message first.';
+return;
+}
+result.style.display='block';
+let advice='Start by checking the surrounding code, recent changes, and the full stack trace.';
+if(/typeerror/i.test(input)){
+advice='Possible TypeError: inspect the value and type of each variable involved. Check for undefined or null values before accessing properties.';
+}else if(/referenceerror/i.test(input)){
+advice='Possible ReferenceError: check whether the variable exists, is spelled correctly, and is in scope.';
+}else if(/syntaxerror/i.test(input)){
+advice='Possible SyntaxError: inspect brackets, quotes, commas, and the line immediately before the reported location.';
+}else if(/404|not found/i.test(input)){
+advice='Possible missing resource: verify the URL, file path, endpoint, and server routing.';
+}else if(/500|internal server error/i.test(input)){
+advice='Possible server-side failure: inspect server logs and the exception details; check recent changes and dependencies.';
+}
+result.textContent='Initial debugging guidance (not an AI diagnosis): '+advice+' Your error: '+input;
+}
+</script>
+</body>
+</html>
